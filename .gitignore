@@ -14,6 +14,8 @@
 
 # production
 /build
+/mongo
+.env
 
 # misc
 .DS_Store
@@ -30,6 +32,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# vscode
+/.vscode/
+# /.vscode/
 
 # typescript
 *.tsbuildinfo
