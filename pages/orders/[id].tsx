@@ -1,11 +1,13 @@
-import { FC } from "react";
-import { ShopLayout } from "../../components/layouts";
+import { NextPage } from "next";
 import NextLink from "next/link";
-import { CartList, OrderSummary } from "../../components/cart";
-import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from "@mui/material";
-import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material";
 
-const OrderPage: FC = () => {
+import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material";
+import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from "@mui/material";
+
+import { ShopLayout } from "../../components/layouts";
+import { CartList, OrderSummary } from "../../components/cart";
+
+const OrderPage: NextPage = () => {
   return (
     <ShopLayout title={"Orden: 28DSA-34F"} pageDescription={"Resumen de la orden"}>
       <Typography variant='h1' component={"h1"}>

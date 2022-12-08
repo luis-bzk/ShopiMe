@@ -1,13 +1,10 @@
-import { CreditCardOffOutlined, CreditScoreOutlined, LinkOffOutlined } from "@mui/icons-material";
-import { Chip, Grid, Link, Typography } from "@mui/material";
+import { NextPage } from "next";
 import NextLink from "next/link";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
-import { FC } from "react";
+
+import { Chip, Grid, Link, Typography } from "@mui/material";
+import { CreditCardOffOutlined, CreditScoreOutlined, LinkOffOutlined } from "@mui/icons-material";
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+
 import { ShopLayout } from "../../components/layouts";
 
 const columns: GridColDef[] = [
@@ -52,7 +49,7 @@ const rows = [
   { id: "34KN2K4D", fullName: "Sofia Rodriguez", email: "email3@email.com", paid: true },
   { id: "SDP39043", fullName: "Juan Carlos", email: "email@email.com", paid: false },
 ];
-const HistoryPage: FC = () => {
+const HistoryPage: NextPage = () => {
   return (
     <ShopLayout title={"Historial de ordenes"} pageDescription={"Historial de ordenes del cliente"}>
       <Typography variant='h1' component={"h1"}>
@@ -61,12 +58,7 @@ const HistoryPage: FC = () => {
 
       <Grid container>
         <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-          ></DataGrid>
+          <DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[10]}></DataGrid>
         </Grid>
       </Grid>
     </ShopLayout>

@@ -1,0 +1,83 @@
+  // =========================== ADD PRODUCT ===========================
+  // ! TEACHER VERSION
+  const addProductToCartTeacher = (product: ICartProduct) => {
+    const productInCart = cartProducts.some((productState) => productState._id == product._id);
+    if (!productInCart) {
+      return dispatch({ type: "UPDATE_PRODUCTS_IN_CART", payload: [...cartProducts, product] });
+    }
+
+    const productInCartButDifferentSize = cartProducts.some(
+      (productState) => productState._id === product._id && productState.size === product.size
+    );
+    if (!productInCartButDifferentSize) {
+      return dispatch({ type: "UPDATE_PRODUCTS_IN_CART", payload: [...cartProducts, product] });
+    }
+
+    //  acumular
+    const updatedProducts = cartProducts.map((productState) => {
+      if (productState._id !== product._id) return productState;
+      if (productState.size !== product.size) return productState;
+
+      // update quantity
+      productState.quantity += product.quantity;
+      return productState;
+    });
+
+    dispatch({ type: "UPDATE_PRODUCTS_IN_CART", payload: updatedProducts });
+  };
+
+// =========================== COOKIES ===========================
+
+  useEffect(() => {
+    Cookie.set("cartProducts", JSON.stringify(cartProducts));
+  }, [cartProducts]);
+
+  useEffect(() => {
+    try {
+      const cartProductsCookies = Cookie.get("cartProducts") ? JSON.parse(Cookie.get("cartProducts")!) : [];
+
+      dispatch({
+        type: "LOAD_CART_FROM_COOKIES",
+        payload: cartProductsCookies,
+      });
+    } catch (error) {
+      dispatch({
+        type: "LOAD_CART_FROM_COOKIES",
+        payload: [],
+      });
+    }
+
+    //!   addProductsToCartFromCookies(cartItemsCookies);
+  }, []);
+
+// =========================== UPDATE QUANTITY ===========================
+
+
+  const updateCartQuantity = (product: ICartProduct) => {
+    dispatch({ type: "CHANGE_PRODUCT_QUANTITY", payload: product });
+  };
+
+
+  | { type: "LOAD_CART_FROM_COOKIES"; payload: Array<ICartProduct> }
+  | { type: "SET_CART_PRODUCTS"; payload: Array<ICartProduct> }
+  | { type: "CHANGE_PRODUCT_QUANTITY"; payload: ICartProduct }
+  | { type: "REMOVE_PRODUCT_IN_CART"; payload: ICartProduct }
+      
+
+  case "LOAD_CART_FROM_COOKIES":
+    return { ...state, cartProducts: action.payload };
+
+  case "SET_CART_PRODUCTS":
+    return { ...state, cartProducts: [...action.payload] };
+
+  case "CHANGE_PRODUCT_QUANTITY":
+    return {
+      ...state,
+      cartProducts: state.cartProducts.map((product) => {
+        if (product._id !== action.payload._id) return product;
+        if (product.size !== action.payload.size) return product;
+        product.quantity = action.payload.quantity;
+        return product;
+      }),
+    };
+

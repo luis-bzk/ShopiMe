@@ -19,10 +19,17 @@ En local se hace uso de la siguiente URI:
 ```bash
 mongodb://localhost:27017/shopimeDB
 ```
-3. Variables de entorno
+3. Reconstrucción de módulos.
+
+```text
+yarn install
+yarn dev
+```
+
+4. Variables de entorno
 
 Cambiar el nombre del archivo __.env.template__ a __.env__
 
-4. Data generation
+5. Data generation
 
 Call ```http://localhost:3000/api/seed``` to insert data in your Mongoose Database.

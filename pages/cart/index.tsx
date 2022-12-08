@@ -1,9 +1,10 @@
-import { FC } from "react";
-import { CartList, OrderSummary } from "../../components/cart";
+import { NextPage } from "next";
+
 import { ShopLayout } from "../../components/layouts";
+import { CartList, OrderSummary } from "../../components/cart";
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from "@mui/material";
 
-const CartPage: FC = () => {
+const CartPage: NextPage = () => {
   return (
     <ShopLayout title={"Carrito - 3"} pageDescription={"Carrito de compras de la tienda"}>
       <Typography variant='h1' component={"h1"}>

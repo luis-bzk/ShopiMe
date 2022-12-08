@@ -3,7 +3,7 @@ import { db, SHOP_CONSTANTS } from "../../../database";
 import { IProduct } from "../../../interfaces";
 import { Product } from "../../../models";
 
-type Data = { message: string } | { products: Array<IProduct> };
+type Data = { message: string } | Array<IProduct>;
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   switch (req.method) {
@@ -32,7 +32,5 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const products = await Product.find(condition).select("title images price inStock slug -_id").lean();
   await db.disconnect();
 
-  return res.status(200).json({
-    products: products,
-  });
+  return res.status(200).json(products);
 };

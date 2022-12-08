@@ -1,8 +1,10 @@
+import { NextPage } from "next";
+
 import { Box, Typography } from "@mui/material";
-import { FC } from "react";
+
 import { ShopLayout } from "../components/layouts";
 
-const ErrorPage404: FC = () => {
+const ErrorPage404: NextPage = () => {
   return (
     <ShopLayout title={"pagina no encontrada"} pageDescription={"No hay nada que mostrar aquí"}>
       <Box

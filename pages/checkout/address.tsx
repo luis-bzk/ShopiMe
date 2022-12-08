@@ -1,18 +1,10 @@
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Box,
-  Button,
-} from "@mui/material";
-import { FC } from "react";
+import { NextPage } from "next";
+
+import { FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, Box, Button } from "@mui/material";
+
 import { ShopLayout } from "../../components/layouts";
 
-const AddressPage: FC = () => {
+const AddressPage: NextPage = () => {
   return (
     <ShopLayout title={"Checkout dirección"} pageDescription={"Confirmar dirección del destino"}>
       <Typography variant='h1' component={"h1"}>

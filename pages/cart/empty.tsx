@@ -1,10 +1,12 @@
-import { FC } from "react";
+import { NextPage } from "next";
 import NextLink from "next/link";
+
 import { Box, Link, Typography } from "@mui/material";
-import { ShopLayout } from "../../components/layouts";
 import { RemoveShoppingCartOutlined } from "@mui/icons-material";
 
-const EmptyPage: FC = () => {
+import { ShopLayout } from "../../components/layouts";
+
+const EmptyPage: NextPage = () => {
   return (
     <ShopLayout title={"Carrito vacío"} pageDescription='No hay artículos en el carrito'>
       <Box
