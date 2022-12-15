@@ -15,7 +15,6 @@ export interface IProduct {
   type: IValidType;
   gender: IValidGender;
 
-  // TODO: createdAt & updatedAt
   createdAt: string;
   updatedAt: string;
 }

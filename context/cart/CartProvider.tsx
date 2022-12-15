@@ -91,11 +91,7 @@ export const CartProvider: FC<props> = ({ children }) => {
   };
 
   const valuesProvider = {
-    cartProducts,
-    cartQuantityProducts,
-    cartSubtotalCost,
-    cartTaxRateCost,
-    cartTotalCost,
+    ...state,
 
     // methods
     addProductToCart,
