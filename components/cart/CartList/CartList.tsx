@@ -66,12 +66,6 @@ export const CartList: FC<Props> = ({ editable = false }) => {
           </Grid>
         );
       })}
-
-      {cartProducts.length === 0 && (
-        <Typography variant='h2' component={"h2"}>
-          No has agregado productos al carrito todavía :)
-        </Typography>
-      )}
     </Fragment>
   );
 };

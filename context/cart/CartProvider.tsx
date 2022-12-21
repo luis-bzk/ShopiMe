@@ -13,6 +13,7 @@ export interface CartState {
   cartSubtotalCost: number;
   cartTaxRateCost: number;
   cartTotalCost: number;
+  cartIsLoaded: boolean;
 }
 
 // initial state
@@ -22,6 +23,7 @@ const CART_INITIAL_STATE: CartState = {
   cartSubtotalCost: 0,
   cartTaxRateCost: 0,
   cartTotalCost: 0,
+  cartIsLoaded: false,
 };
 
 // props provider
@@ -40,10 +42,12 @@ export const CartProvider: FC<props> = ({ children }) => {
     try {
       const cartProductsCookies = Cookie.get("cartProducts") ? JSON.parse(Cookie.get("cartProducts")!) : [];
 
+      dispatch({ type: "SET_CART_LOADED" });
       updateCartProducts(cartProductsCookies);
     } catch (error) {
       updateCartProducts([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // * General Function

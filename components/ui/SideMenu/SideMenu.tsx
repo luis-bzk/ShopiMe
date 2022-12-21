@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Fragment, use, useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 import {
@@ -28,12 +28,15 @@ import {
   VpnKeyOutlined,
 } from "@mui/icons-material";
 
-import { UiContext } from "../../../context/ui/UiContext";
+import { UiContext, AuthContext } from "../../../context";
 
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
+  const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  console.log({ router });
 
   const navigateTo = (url: string) => {
     router.push(url);
@@ -74,20 +77,23 @@ export const SideMenu = () => {
               }
             />
           </ListItem>
+          {isLoggedIn && (
+            <Fragment>
+              <ListItemButton onClick={() => navigateTo("/profile")}>
+                <ListItemIcon>
+                  <AccountCircleOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Perfil"} />
+              </ListItemButton>
 
-          <ListItemButton onClick={() => navigateTo("/profile")}>
-            <ListItemIcon>
-              <AccountCircleOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Perfil"} />
-          </ListItemButton>
-
-          <ListItemButton onClick={() => navigateTo("/orders/history")}>
-            <ListItemIcon>
-              <ConfirmationNumberOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Mis Ordenes"} />
-          </ListItemButton>
+              <ListItemButton onClick={() => navigateTo("/orders/history")}>
+                <ListItemIcon>
+                  <ConfirmationNumberOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Mis Ordenes"} />
+              </ListItemButton>
+            </Fragment>
+          )}
 
           <ListItemButton sx={{ display: { xs: "", sm: "none" } }} onClick={() => navigateTo("/category/men")}>
             <ListItemIcon>
@@ -110,44 +116,51 @@ export const SideMenu = () => {
             <ListItemText primary={"Niños"} />
           </ListItemButton>
 
-          <ListItemButton onClick={() => navigateTo("/auth/login")}>
-            <ListItemIcon>
-              <VpnKeyOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Ingresar"} />
-          </ListItemButton>
+          {!isLoggedIn && (
+            <ListItemButton onClick={() => navigateTo(`/auth/login?page=${router.asPath ? router.asPath : ""}`)}>
+              <ListItemIcon>
+                <VpnKeyOutlined />
+              </ListItemIcon>
+              <ListItemText primary={"Ingresar"} />
+            </ListItemButton>
+          )}
 
-          <ListItemButton onClick={() => navigateTo("/auth/logout")}>
-            <ListItemIcon>
-              <LoginOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Salir"} />
-          </ListItemButton>
+          {isLoggedIn && (
+            <ListItemButton onClick={logoutUser}>
+              <ListItemIcon>
+                <LoginOutlined />
+              </ListItemIcon>
+              <ListItemText primary={"Salir"} />
+            </ListItemButton>
+          )}
 
-          {/* Admin */}
-          <Divider />
-          <ListSubheader>Admin Panel</ListSubheader>
+          {isLoggedIn && user?.role === "admin" && (
+            <Fragment>
+              <Divider />
+              <ListSubheader>Admin Panel</ListSubheader>
 
-          <ListItemButton onClick={() => navigateTo("/cart")}>
-            <ListItemIcon>
-              <CategoryOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Productos"} />
-          </ListItemButton>
+              <ListItemButton onClick={() => navigateTo("/cart")}>
+                <ListItemIcon>
+                  <CategoryOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Productos"} />
+              </ListItemButton>
 
-          <ListItemButton onClick={() => navigateTo("/orders/history")}>
-            <ListItemIcon>
-              <ConfirmationNumberOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Ordenes"} />
-          </ListItemButton>
+              <ListItemButton onClick={() => navigateTo("/orders/history")}>
+                <ListItemIcon>
+                  <ConfirmationNumberOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Ordenes"} />
+              </ListItemButton>
 
-          <ListItemButton onClick={() => navigateTo("/users")}>
-            <ListItemIcon>
-              <AdminPanelSettings />
-            </ListItemIcon>
-            <ListItemText primary={"Usuarios"} />
-          </ListItemButton>
+              <ListItemButton onClick={() => navigateTo("/users")}>
+                <ListItemIcon>
+                  <AdminPanelSettings />
+                </ListItemIcon>
+                <ListItemText primary={"Usuarios"} />
+              </ListItemButton>
+            </Fragment>
+          )}
         </List>
       </Box>
     </Drawer>

@@ -21,11 +21,11 @@ type FormData = {
 
 const RegisterPage: NextPage = () => {
   const router = useRouter();
-
   const { registerUser } = useContext(AuthContext);
-
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const pageDestination = router.query.page?.toString() || "/";
 
   const {
     register,
@@ -49,7 +49,7 @@ const RegisterPage: NextPage = () => {
     }
 
     // TODO navegar a la pagina que el usuario estaba
-    router.replace("/");
+    router.replace(pageDestination);
   };
 
   return (
@@ -130,7 +130,7 @@ const RegisterPage: NextPage = () => {
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent='space-between'>
               <Typography>Ya tienes una cuenta?</Typography>
-              <NextLink href={"/auth/login"} legacyBehavior passHref>
+              <NextLink href={`/auth/login?page=${pageDestination}`} legacyBehavior passHref>
                 <Link underline='always' className='blue-link'>
                   Inicia Sesión
                 </Link>

@@ -1,11 +1,12 @@
 import { FC, useReducer, useEffect } from "react";
+import { useRouter } from "next/router";
 
+import axios from "axios";
 import Cookies from "js-cookie";
 
 import { shopiMeApi } from "../../api";
-import { IUserResponse } from "../../interfaces";
 import { AuthContext, authReducer } from "./";
-import axios from "axios";
+import { IUserResponse } from "../../interfaces";
 
 // interface constructor -> state
 export interface AuthState {
@@ -27,12 +28,17 @@ interface props {
 // provider
 export const AuthProvider: FC<props> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     checkToken();
   }, []);
 
   const checkToken = async () => {
+    if (!Cookies.get("token")) {
+      return;
+    }
+
     try {
       const { data } = (await shopiMeApi.get("/user/validate-token")) as {
         data: { token: string; user: IUserResponse };
@@ -97,12 +103,19 @@ export const AuthProvider: FC<props> = ({ children }) => {
     }
   };
 
+  const logoutUser = () => {
+    Cookies.remove("token");
+    Cookies.remove("cartProducts");
+    router.reload();
+  };
+
   const valuesProvider = {
     ...state,
 
     // methods
     loginUser,
     registerUser,
+    logoutUser,
   };
 
   return <AuthContext.Provider value={valuesProvider}>{children}</AuthContext.Provider>;

@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -11,7 +12,6 @@ import { shopiMeApi } from "../../api";
 import { validations } from "../../utils";
 import { AuthContext } from "../../context";
 import { AuthLayout } from "../../components/layouts";
-import { useRouter } from "next/router";
 
 type FormData = {
   email: string;
@@ -23,6 +23,8 @@ const LoginPage: NextPage = () => {
   const { loginUser } = useContext(AuthContext);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const pageDestination = router.query.page?.toString() || "/";
 
   const {
     register,
@@ -46,7 +48,7 @@ const LoginPage: NextPage = () => {
     }
 
     // TODO navegar a la pagina que el usuario estaba
-    router.replace("/");
+    router.replace(pageDestination);
   };
 
   return (
@@ -105,7 +107,7 @@ const LoginPage: NextPage = () => {
 
             <Grid item xs={12} display={"flex"} justifyContent='space-between'>
               <Typography>No tienes una cuenta?</Typography>
-              <NextLink href={"/auth/register"} legacyBehavior passHref>
+              <NextLink href={`/auth/register?page=${pageDestination}`} legacyBehavior passHref>
                 <Link underline='always' className='blue-link'>
                   Crea una
                 </Link>
