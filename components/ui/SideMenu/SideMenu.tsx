@@ -36,8 +36,6 @@ export const SideMenu = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
-  console.log({ router });
-
   const navigateTo = (url: string) => {
     router.push(url);
     toggleSideMenu();

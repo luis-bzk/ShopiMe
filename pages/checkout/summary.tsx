@@ -1,12 +1,31 @@
 import { NextPage } from "next";
 import NextLink from "next/link";
+import { useContext } from "react";
+import { useRouter } from "next/router";
 
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
 
+import { countries } from "../../utils";
+import { CartContext } from "../../context";
 import { ShopLayout } from "../../components/layouts";
 import { CartList, OrderSummary } from "../../components/cart";
 
 const SummaryPage: NextPage = () => {
+  const { shippingAddress, cartQuantityProducts } = useContext(CartContext);
+
+  const router = useRouter();
+
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const countryNameDecoded = (countryCode: string) => {
+    const country = countries.filter((country) => country.code === countryCode);
+
+    return country[0].name;
+  };
+  const { name, lastname, address, address2 = "", city, country, phone, zipcode } = shippingAddress;
+
   return (
     <ShopLayout title={"Resumen de orden"} pageDescription={"Resumen de la orden"}>
       <Typography variant='h1' component={"h1"}>
@@ -21,7 +40,9 @@ const SummaryPage: NextPage = () => {
         <Grid item xs={12} md={5}>
           <Card className='summary-card'>
             <CardContent>
-              <Typography variant='h2'>Resumen (3 productos)</Typography>
+              <Typography variant='h2'>
+                Resumen ({cartQuantityProducts} {cartQuantityProducts > 1 ? "productos" : "producto"} )
+              </Typography>
 
               <Divider sx={{ marginY: 1 }} />
 
@@ -32,10 +53,17 @@ const SummaryPage: NextPage = () => {
                 </NextLink>
               </Box>
 
-              <Typography>Fernando herrera</Typography>
-              <Typography>Cuenca Ecuador</Typography>
-              <Typography>Vicente Mideros</Typography>
-              <Typography>+593 098 765 4321</Typography>
+              <Typography>
+                {name} {lastname}
+              </Typography>
+              <Typography>
+                {address} {address2 && `, ${address2}`}
+              </Typography>
+              <Typography>
+                {city}, {zipcode}
+              </Typography>
+              <Typography>{countryNameDecoded(country)}</Typography>
+              <Typography>{phone}</Typography>
 
               <Divider sx={{ marginY: 1 }} />
 

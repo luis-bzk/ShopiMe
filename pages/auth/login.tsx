@@ -3,12 +3,10 @@ import { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from "@mui/material";
 
-import { shopiMeApi } from "../../api";
 import { validations } from "../../utils";
 import { AuthContext } from "../../context";
 import { AuthLayout } from "../../components/layouts";

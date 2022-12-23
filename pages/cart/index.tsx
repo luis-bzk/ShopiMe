@@ -44,7 +44,7 @@ const CartPage: NextPage = () => {
               <OrderSummary />
 
               <Box sx={{ marginTop: 3 }}>
-                <Button color='secondary' className='circular-btn' fullWidth>
+                <Button color='secondary' className='circular-btn' fullWidth href='/checkout/address'>
                   Revisar
                 </Button>
               </Box>
