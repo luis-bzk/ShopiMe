@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 // import { seedData } from "../database";
-import { useProducts } from "../hooks";
 import { Typography } from "@mui/material";
+
+import { useProducts } from "../hooks";
 import { ShopLayout } from "../components/layouts";
 import { ProductList } from "../components/products";
 import { FullScreenLoading } from "../components/ui";

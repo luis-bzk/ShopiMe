@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import Cookies from "js-cookie";
@@ -33,7 +33,23 @@ const AddressPage: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TShippingAddressData>({ defaultValues: getAddressFromCookies() });
+    reset,
+  } = useForm<TShippingAddressData>({
+    defaultValues: {
+      name: "",
+      lastname: "",
+      address: "",
+      address2: "",
+      zipcode: "",
+      city: "",
+      country: "",
+      phone: "",
+    },
+  });
+
+  useEffect(() => {
+    reset(getAddressFromCookies());
+  }, [reset]);
 
   const onSetAddress = async (data: TShippingAddressData) => {
     updateAddress(data);
@@ -124,24 +140,25 @@ const AddressPage: NextPage = () => {
             <FormControl fullWidth>
               {/* <InputLabel>País</InputLabel> */}
               <TextField
-                select
+                // select
                 type={"text"}
                 variant='filled'
                 label='País'
-                defaultValue={Cookies.get("country") || countries[0].code}
+                fullWidth
+                // defaultValue={Cookies.get("country") || countries[0].code}
                 {...register("country", {
                   required: "Este campo es necesario",
                 })}
                 error={!!errors.country}
-                // helperText={errors.country?.message}
+                helperText={errors.country?.message}
               >
-                {countries.map((country) => {
+                {/* {countries.map((country) => {
                   return (
                     <MenuItem value={country.code} key={country.code}>
                       {country.name}
                     </MenuItem>
                   );
-                })}
+                })} */}
               </TextField>
             </FormControl>
           </Grid>

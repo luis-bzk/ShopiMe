@@ -1,17 +1,18 @@
 import { useState, useContext } from "react";
-import { NextPage } from "next";
 import NextLink from "next/link";
+import { GetServerSideProps, NextPage } from "next";
 
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { ErrorOutline } from "@mui/icons-material";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from "@mui/material";
 
-import { AuthLayout } from "../../components/layouts";
-import { validations } from "../../utils";
-import { shopiMeApi } from "../../api";
-import axios from "axios";
-import { ErrorOutline } from "@mui/icons-material";
-import { AuthContext } from "../../context";
 import { useRouter } from "next/router";
+import { validations } from "../../utils";
+import { AuthContext } from "../../context";
+import { AuthLayout } from "../../components/layouts";
 
 type FormData = {
   name: string;
@@ -48,8 +49,8 @@ const RegisterPage: NextPage = () => {
       return;
     }
 
-    // TODO navegar a la pagina que el usuario estaba
-    router.replace(pageDestination);
+    // router.replace(pageDestination);
+    await signIn("credentials", { email, password });
   };
 
   return (
@@ -141,6 +142,24 @@ const RegisterPage: NextPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  const { page = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString()!,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default RegisterPage;

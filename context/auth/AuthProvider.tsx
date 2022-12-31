@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import axios from "axios";
 import Cookies from "js-cookie";
+import { signOut, useSession } from "next-auth/react";
 
 import { shopiMeApi } from "../../api";
 import { AuthContext, authReducer } from "./";
@@ -28,11 +29,19 @@ interface props {
 // provider
 export const AuthProvider: FC<props> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const { data, status } = useSession();
+
   const router = useRouter();
 
   useEffect(() => {
-    checkToken();
-  }, []);
+    if (status === "authenticated") {
+      dispatch({ type: "LOGIN_USER", payload: data.user as IUserResponse });
+    }
+  }, [data, status]);
+
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
   const checkToken = async () => {
     if (!Cookies.get("token")) {
@@ -104,9 +113,20 @@ export const AuthProvider: FC<props> = ({ children }) => {
   };
 
   const logoutUser = () => {
-    Cookies.remove("token");
+    // Cookies.remove("token");
+    signOut();
     Cookies.remove("cartProducts");
-    router.reload();
+
+    Cookies.remove("name");
+    Cookies.remove("lastname");
+    Cookies.remove("address");
+    Cookies.remove("address2");
+    Cookies.remove("zipcode");
+    Cookies.remove("city");
+    Cookies.remove("country");
+    Cookies.remove("phone");
+
+    // router.reload();
   };
 
   const valuesProvider = {

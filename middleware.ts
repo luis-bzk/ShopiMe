@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as jwtJose from "jose";
+import { getToken } from "next-auth/jwt";
 
-export default async function middleware(req: NextRequest) {
-  const previousPage = req.nextUrl.pathname;
+export async function middleware(req: NextRequest) {
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (previousPage.startsWith("/checkout")) {
-    const token = req.cookies.get("token")?.value || "";
+  if (!session) {
+    const requestedPage = req.nextUrl.pathname;
+    const url = req.nextUrl.clone();
+    url.pathname = `/auth/login`;
+    url.search = `page=${requestedPage}`;
 
-    try {
-      await jwtJose.jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET_SEED));
-      return NextResponse.next();
-    } catch (error) {
-      return NextResponse.redirect(new URL(`/auth/login?page=${previousPage}`, req.url));
-    }
+    return NextResponse.redirect(url);
   }
+
+  return NextResponse.next();
 }
 
 export const config = {

@@ -1,14 +1,17 @@
-import { useState, useContext } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 
+import { getProviders, signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { ErrorOutline } from "@mui/icons-material";
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from "@mui/material";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
+import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from "@mui/material";
 
 import { validations } from "../../utils";
-import { AuthContext } from "../../context";
 import { AuthLayout } from "../../components/layouts";
 
 type FormData = {
@@ -18,9 +21,17 @@ type FormData = {
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const { loginUser } = useContext(AuthContext);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [providers, setProviders] = useState<any>({});
+
+  useEffect(() => {
+    getProviders().then((prov) => {
+      console.log(prov);
+      setProviders(prov);
+    });
+  }, []);
 
   const pageDestination = router.query.page?.toString() || "/";
 
@@ -33,20 +44,22 @@ const LoginPage: NextPage = () => {
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
 
-    const { hasError, message } = await loginUser(email, password);
+    // const { hasError, message } = await loginUser(email, password);
 
-    if (hasError) {
-      setErrorMessage(message!);
+    // if (hasError) {
+    //   setErrorMessage(message!);
 
-      setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 3000);
-      return;
-    }
+    //   setShowError(true);
+    //   setTimeout(() => {
+    //     setShowError(false);
+    //   }, 3000);
+    //   return;
+    // }
 
-    // TODO navegar a la pagina que el usuario estaba
-    router.replace(pageDestination);
+    // // TODO navegar a la pagina que el usuario estaba
+    // router.replace(pageDestination);
+
+    await signIn("credentials", { email, password });
   };
 
   return (
@@ -111,11 +124,54 @@ const LoginPage: NextPage = () => {
                 </Link>
               </NextLink>
             </Grid>
+
+            <Grid item xs={12} display={"flex"} flexDirection={"column"} justifyContent='space-between'>
+              <Divider sx={{ width: "100%", marginBottom: 2 }} />
+
+              {Object.values(providers).map((provider: any) => {
+                if (provider.id === "credentials") {
+                  return <Fragment key={provider.id} />;
+                }
+                return (
+                  <Button
+                    key={provider.id}
+                    variant='outlined'
+                    fullWidth
+                    color='primary'
+                    sx={{ marginBottom: 1 }}
+                    onClick={() => signIn(provider.id)}
+                  >
+                    {provider.name}
+                  </Button>
+                );
+              })}
+            </Grid>
           </Grid>
         </Box>
       </form>
     </AuthLayout>
   );
+};
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  const { page = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString()!,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default LoginPage;
