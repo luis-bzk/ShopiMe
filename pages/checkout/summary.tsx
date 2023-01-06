@@ -1,18 +1,20 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
 import Cookies from "js-cookie";
-import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from "@mui/material";
 
-import { countries } from "../../utils";
+// import { countries } from "../../utils";
 import { CartContext } from "../../context";
 import { ShopLayout } from "../../components/layouts";
 import { CartList, OrderSummary } from "../../components/cart";
 
 const SummaryPage: NextPage = () => {
-  const { shippingAddress, cartQuantityProducts } = useContext(CartContext);
+  const { shippingAddress, cartQuantityProducts, createOrder } = useContext(CartContext);
+  const [isPosting, setIsPosting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
@@ -22,15 +24,28 @@ const SummaryPage: NextPage = () => {
     }
   }, [router]);
 
+  const onCreateOrder = async () => {
+    setIsPosting(true);
+
+    const { hasError, message } = await createOrder();
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+
+    router.replace(`/orders/${message}`);
+  };
+
   if (!shippingAddress) {
     return <></>;
   }
 
-  const countryNameDecoded = (countryCode: string) => {
-    const country = countries.filter((country) => country.code === countryCode);
+  // const countryNameDecoded = (countryCode: string) => {
+  //   const country = countries.filter((country) => country.code === countryCode);
 
-    return country[0].name;
-  };
+  //   return country[0].name;
+  // };
   const { name, lastname, address, address2 = "", city, country, phone, zipcode } = shippingAddress;
 
   return (
@@ -82,10 +97,25 @@ const SummaryPage: NextPage = () => {
 
               <OrderSummary />
 
-              <Box sx={{ marginTop: 3 }}>
-                <Button color='secondary' className='circular-btn' fullWidth>
+              <Box sx={{ marginTop: 3 }} display={"flex"} flexDirection={"column"}>
+                <Button
+                  color='secondary'
+                  className='circular-btn'
+                  fullWidth
+                  onClick={onCreateOrder}
+                  disabled={isPosting && true}
+                >
                   Confirmar orden
                 </Button>
+                {errorMessage && (
+                  <Chip
+                    color='error'
+                    label={errorMessage}
+                    className='fadeIn'
+                    sx={{ marginTop: 1 }}
+                    variant={"outlined"}
+                  />
+                )}
               </Box>
             </CardContent>
           </Card>

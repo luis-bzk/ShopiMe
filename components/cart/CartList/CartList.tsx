@@ -5,13 +5,14 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from "
 
 import { ItemCounter } from "../../ui";
 import { CartContext } from "../../../context";
-import { ICartProduct } from "../../../interfaces";
+import { ICartProduct, IOrderItem } from "../../../interfaces";
 
 interface Props {
   editable?: boolean;
+  orderProducts?: Array<IOrderItem>;
 }
 
-export const CartList: FC<Props> = ({ editable = false }) => {
+export const CartList: FC<Props> = ({ editable = false, orderProducts = [] }) => {
   const { cartProducts, updateCartQuantity, removeCartProduct } = useContext(CartContext);
 
   const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
@@ -19,9 +20,11 @@ export const CartList: FC<Props> = ({ editable = false }) => {
     updateCartQuantity(product);
   };
 
+  const productsToShow = orderProducts.length >= 1 ? orderProducts : cartProducts;
+
   return (
     <Fragment>
-      {cartProducts.map((product) => {
+      {productsToShow.map((product) => {
         return (
           <Grid container key={product._id + product.size} spacing={2} sx={{ marginBottom: 1 }}>
             <Grid item xs={3}>

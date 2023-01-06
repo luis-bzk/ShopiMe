@@ -28,7 +28,7 @@ export const changeCartProductQuantity = (cartProducts: Array<ICartProduct>, pro
 };
 
 export const deleteProductFromCart = (cartProducts: Array<ICartProduct>, productToRemove: ICartProduct) => {
-  console.log({ cartProducts });
+  // console.log({ cartProducts });
   const updatedItems = cartProducts.filter(
     (product) => !(product._id === productToRemove._id && product.size === productToRemove.size)
   );

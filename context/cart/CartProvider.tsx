@@ -1,9 +1,11 @@
 import { FC, useEffect, useReducer } from "react";
 
 import { CartContext, cartReducer } from "./";
-import { ICartProduct, TShippingAddressData } from "../../interfaces";
+import { ICartProduct, IOrder, TShippingAddressData } from "../../interfaces";
 import { addCartProduct, changeCartProductQuantity, deleteProductFromCart } from "./cartMethods";
 import Cookies from "js-cookie";
+import shopiMeApi from "../../api/shopiMeApi";
+import axios from "axios";
 
 // interface constructor -> state
 export interface CartState {
@@ -76,9 +78,9 @@ export const CartProvider: FC<props> = ({ children }) => {
       (total, cartItem) => total + cartItem.quantity * cartItem.price,
       0
     );
-    // const cartCalcTaxRate = Number((cartCalSubtotalCart * taxRate).toFixed(2));
     const cartCalcTaxRate = cartCalSubtotalCart * taxRate;
-    const cartCalcTotalCost = cartCalcTaxRate + cartCalSubtotalCart;
+    // const cartCalcTotalCost = cartCalcTaxRate + cartCalSubtotalCart;
+    const cartCalcTotalCost = cartCalSubtotalCart * (taxRate + 1);
 
     // * set cookies
     Cookies.set("cartProducts", JSON.stringify(newCartProducts));
@@ -113,6 +115,11 @@ export const CartProvider: FC<props> = ({ children }) => {
     updateCartProducts(newCartProducts);
   };
 
+  // * Remove all data products from cart
+  const clearCartProducts = () => {
+    updateCartProducts([]);
+  };
+
   const updateAddress = (address: TShippingAddressData) => {
     Cookies.set("name", address.name);
     Cookies.set("lastname", address.lastname);
@@ -126,6 +133,44 @@ export const CartProvider: FC<props> = ({ children }) => {
     dispatch({ type: "UPDATE_SHIPPING_ADDRESS", payload: address });
   };
 
+  const createOrder = async (): Promise<{ hasError: boolean; message: string }> => {
+    if (!state.shippingAddress) {
+      throw new Error("No hay dirección de entrega");
+    }
+
+    const body: IOrder = {
+      orderItems: state.cartProducts.map((product) => ({ ...product, size: product.size! })),
+      shippingAddress: state.shippingAddress,
+      quantityProducts: state.cartQuantityProducts,
+      subtotalCost: state.cartSubtotalCost,
+      taxRateCost: state.cartTaxRateCost,
+      totalCost: state.cartTotalCost,
+      isPaid: false,
+    };
+
+    try {
+      const { data } = await shopiMeApi.post<IOrder>("/orders", body);
+
+      clearCartProducts();
+
+      return {
+        hasError: false,
+        message: data._id!,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          hasError: true,
+          message: error.response?.data.message,
+        };
+      }
+      return {
+        hasError: true,
+        message: "Error no controlado, hablar con administrador",
+      };
+    }
+  };
+
   const valuesProvider = {
     ...state,
 
@@ -134,6 +179,7 @@ export const CartProvider: FC<props> = ({ children }) => {
     updateCartQuantity,
     removeCartProduct,
     updateAddress,
+    createOrder,
   };
 
   return <CartContext.Provider value={valuesProvider}>{children}</CartContext.Provider>;

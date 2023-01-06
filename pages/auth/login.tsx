@@ -28,7 +28,7 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     getProviders().then((prov) => {
-      console.log(prov);
+      // console.log(prov);
       setProviders(prov);
     });
   }, []);
@@ -60,6 +60,7 @@ const LoginPage: NextPage = () => {
     // router.replace(pageDestination);
 
     await signIn("credentials", { email, password });
+    // console.log({ response });
   };
 
   return (
