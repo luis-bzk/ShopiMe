@@ -3,9 +3,9 @@ import NextLink from "next/link";
 
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from "@mui/material";
 
-import { ItemCounter } from "../../ui";
-import { CartContext } from "../../../context";
-import { ICartProduct, IOrderItem } from "../../../interfaces";
+import { ItemCounter } from "../ui";
+import { CartContext } from "../../context";
+import { ICartProduct, IOrderItem } from "../../interfaces";
 
 interface Props {
   editable?: boolean;

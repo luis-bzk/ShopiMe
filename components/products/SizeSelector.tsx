@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { FC } from "react";
-import { IValidSize } from "../../../interfaces";
+import { IValidSize } from "../../interfaces";
 
 interface Props {
   selectedSize?: IValidSize;

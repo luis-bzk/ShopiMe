@@ -4,3 +4,4 @@ export * from "./user";
 export * from "./addressData";
 export * from "./order";
 export * from "./paypal";
+export * from "./dashboard";

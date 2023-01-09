@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { FC, useContext } from "react";
-import { CartContext } from "../../../context";
-import { Currency } from "../../../utils";
+import { CartContext } from "../../context";
+import { Currency } from "../../utils";
 
 interface ISummary {
   quantityProducts: number;

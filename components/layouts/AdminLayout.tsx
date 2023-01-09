@@ -1,15 +1,18 @@
 import Head from "next/head";
 import { FC, Fragment } from "react";
-import { Navbar, SideMenu } from "../../ui";
+import { Navbar, SideMenu } from "../ui";
+import { AdminNavbar } from "../admin";
+import { Box, Typography } from "@mui/material";
 
 interface Props {
   children: JSX.Element | Array<JSX.Element>;
   title: string;
+  subTitle: string;
   pageDescription: string;
-  imageFullUrl?: string;
+  icon?: JSX.Element;
 }
 
-export const ShopLayout: FC<Props> = ({ children, title, pageDescription, imageFullUrl }) => {
+export const AdminLayout: FC<Props> = ({ children, title, subTitle, pageDescription, icon }) => {
   return (
     <Fragment>
       <Head>
@@ -17,12 +20,10 @@ export const ShopLayout: FC<Props> = ({ children, title, pageDescription, imageF
         <meta name='description' content={pageDescription} />
         <meta name='og:title' content={title} />
         <meta name='og:description' content={pageDescription} />
-
-        {imageFullUrl && <meta name='og:image' content={imageFullUrl} />}
       </Head>
 
       <nav>
-        <Navbar />
+        <AdminNavbar />
       </nav>
 
       {/* //TODO: Sidebar */}
@@ -35,11 +36,18 @@ export const ShopLayout: FC<Props> = ({ children, title, pageDescription, imageF
           padding: "0px 30px",
         }}
       >
-        {children}
-      </main>
+        <Box display={"flex"} flexDirection={"column"}>
+          <Typography variant={"h1"} component={"h1"}>
+            {icon} {title}
+          </Typography>
 
-      {/* footer */}
-      <footer>{/* //TODO: mi custom footer */}</footer>
+          <Typography variant={"h2"} component={"h2"} sx={{ marginBottom: 1 }}>
+            {subTitle}
+          </Typography>
+        </Box>
+
+        <Box className='fadeIn'>{children}</Box>
+      </main>
     </Fragment>
   );
 };

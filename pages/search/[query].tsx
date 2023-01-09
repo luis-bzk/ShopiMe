@@ -16,24 +16,14 @@ interface Props {
 
 const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
   return (
-    <ShopLayout
-      title={"Shopi-Me | Search"}
-      pageDescription={"Encuentra lo que necesitas al mejor precio aquí"}
-    >
-      <Typography
-        variant='h1'
-        component={"h1"}
-      >
+    <ShopLayout title={"Shopi-Me | Search"} pageDescription={"Encuentra lo que necesitas al mejor precio aquí"}>
+      <Typography variant='h1' component={"h1"}>
         Buscar Productos
       </Typography>
 
       {foundProducts ? (
         <Box display='flex'>
-          <Typography
-            variant='h2'
-            component={"h2"}
-            sx={{ marginTop: 1, marginBottom: 1 }}
-          >
+          <Typography variant='h2' component={"h2"} sx={{ marginTop: 1, marginBottom: 1 }}>
             Productos relacionados con
           </Typography>
 
@@ -49,11 +39,7 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
         </Box>
       ) : (
         <Box display='flex'>
-          <Typography
-            variant='h2'
-            component={"h2"}
-            sx={{ marginTop: 1, marginBottom: 1 }}
-          >
+          <Typography variant='h2' component={"h2"} sx={{ marginTop: 1, marginBottom: 1 }}>
             No encontramos ningún producto relacionado con:
           </Typography>
 
@@ -91,11 +77,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   let products = await dbProducts.getProductsByTerms(query); // your fetch function here
   const foundProducts = products.length > 0;
+  console.log({ products });
+  console.log({ foundProducts });
 
   // TODO: Retornar otros productos si no existe X producto
   if (!foundProducts) {
     products = await dbProducts.getAllProducts();
   }
+  console.log({ products });
 
   return {
     props: { products: products, foundProducts: foundProducts, query: query },

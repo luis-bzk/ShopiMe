@@ -1,2 +1,2 @@
-export * from "./CartList/CartList";
-export * from "./OrderSummary/OrderSummary";
+export * from "./CartList";
+export * from "./OrderSummary";

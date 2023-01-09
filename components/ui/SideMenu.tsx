@@ -20,6 +20,7 @@ import {
   AdminPanelSettings,
   CategoryOutlined,
   ConfirmationNumberOutlined,
+  DashboardCustomizeOutlined,
   EscalatorWarningOutlined,
   FemaleOutlined,
   LoginOutlined,
@@ -28,7 +29,7 @@ import {
   VpnKeyOutlined,
 } from "@mui/icons-material";
 
-import { UiContext, AuthContext } from "../../../context";
+import { UiContext, AuthContext } from "../../context";
 
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
@@ -137,21 +138,28 @@ export const SideMenu = () => {
               <Divider />
               <ListSubheader>Admin Panel</ListSubheader>
 
-              <ListItemButton onClick={() => navigateTo("/cart")}>
+              <ListItemButton onClick={() => navigateTo("/admin")}>
+                <ListItemIcon>
+                  <DashboardCustomizeOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Dashboard"} />
+              </ListItemButton>
+
+              <ListItemButton onClick={() => navigateTo("/admin/products")}>
                 <ListItemIcon>
                   <CategoryOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Productos"} />
               </ListItemButton>
 
-              <ListItemButton onClick={() => navigateTo("/orders/history")}>
+              <ListItemButton onClick={() => navigateTo("/admin/orders")}>
                 <ListItemIcon>
                   <ConfirmationNumberOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Ordenes"} />
               </ListItemButton>
 
-              <ListItemButton onClick={() => navigateTo("/users")}>
+              <ListItemButton onClick={() => navigateTo("/admin/users")}>
                 <ListItemIcon>
                   <AdminPanelSettings />
                 </ListItemIcon>

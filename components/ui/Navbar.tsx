@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { CartContext, UiContext } from "../../../context";
+import { CartContext, UiContext } from "../../context";
 
 interface Props {}
 

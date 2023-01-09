@@ -2,8 +2,8 @@ import { NextPage, GetServerSideProps } from "next";
 import NextLink from "next/link";
 
 import { Chip, Grid, Link, Typography } from "@mui/material";
-import { CreditCardOffOutlined, CreditScoreOutlined, LinkOffOutlined } from "@mui/icons-material";
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 import { ShopLayout } from "../../components/layouts";
 import { getSession } from "next-auth/react";
@@ -48,7 +48,6 @@ interface Props {
 }
 
 const HistoryPage: NextPage<Props> = ({ orders }) => {
-  // const rows = orders.map((order) => (id = order._id));
   const rows = orders.map((order, idx) => {
     return {
       id: idx + 1,
@@ -57,6 +56,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
       orderId: order._id,
     };
   });
+
   return (
     <ShopLayout title={"Historial de ordenes"} pageDescription={"Historial de ordenes del cliente"}>
       <Typography variant='h1' component={"h1"}>
