@@ -16,7 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 }
 
 const getAdminData = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  db.connect();
+  await db.connect();
 
   const [numberOfOrders, paidOrders, numberOfClients, numberOfProducts, productsWithNoInventory, lowInventory] =
     await Promise.all([
@@ -27,7 +27,7 @@ const getAdminData = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
       Product.find({ inStock: 0 }).count(),
       Product.find({ inStock: { $lte: 10 } }).count(),
     ]);
-  db.disconnect();
+  await db.disconnect();
 
   res.status(200).json({
     numberOfOrders,

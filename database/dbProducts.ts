@@ -42,10 +42,10 @@ export const getProductsByTerms = async (term: string): Promise<Array<IProduct>>
 };
 
 export const getAllProducts = async (): Promise<Array<IProduct>> => {
-  db.connect();
+  await db.connect();
   const products = await Product.find().select("title images price inStock slug -_id").lean();
   console.log({ productosGetAllProducts: products });
-  db.disconnect();
+  await db.disconnect();
 
   return JSON.parse(JSON.stringify(products));
 };
