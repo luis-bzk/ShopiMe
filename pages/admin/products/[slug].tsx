@@ -105,11 +105,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         formData.append("file", file);
 
         const { data } = await shopiMeApi.post("/admin/upload", formData);
-        console.log(data);
+        setValue("images", [...getValues("images"), data.message], { shouldValidate: true });
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onDeleteImage = (image: string) => {
+    setValue(
+      "images",
+      getValues("images").filter((img) => img !== image),
+      { shouldValidate: true }
+    );
   };
 
   const onSubmitForm = async (form: IProductFormData) => {
@@ -171,14 +179,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             />
 
             <TextField
+              type={"text"}
               label='Descripción'
               variant='filled'
               fullWidth
-              multiline
+              multiline={true}
+              maxRows={8}
+              rows={8}
               sx={{ mb: 1 }}
               {...register("description", {
                 required: "Este campo es requerido",
-                minLength: { value: 10, message: "Mínimo 10 caracteres" },
+                minLength: { value: 2, message: "Mínimo 2 caracteres" },
               })}
               error={!!errors.description}
               helperText={errors.description?.message}
@@ -335,16 +346,23 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 style={{ display: "none" }}
                 onChange={onFilesSelected}
               />
-
-              <Chip label='Es necesario al 2 imágenes' color='error' variant='outlined' sx={{ mb: 2 }} />
+              {getValues("images").length < 2 && (
+                <Chip
+                  label='Es necesario al 2 imágenes'
+                  color='error'
+                  variant='outlined'
+                  className='fadeIn'
+                  sx={{ mb: 2 }}
+                />
+              )}
 
               <Grid container spacing={2}>
-                {product.images.map((img) => (
+                {getValues("images").map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
-                      <CardMedia component='img' className='fadeIn' image={`/products/${img}`} alt={img} />
+                      <CardMedia component='img' className='fadeIn' image={img} alt={img} />
                       <CardActions>
-                        <Button fullWidth color='error'>
+                        <Button fullWidth color='error' onClick={() => onDeleteImage(img)}>
                           Borrar
                         </Button>
                       </CardActions>

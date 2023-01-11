@@ -11,7 +11,10 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
     return null;
   }
 
-  // TODO: Procesamiento de las imagenes cuando se suban al server
+  //  ! IMAGES LOCALHOST
+  product.images = product.images.map((image) => {
+    return image.includes("http") ? image : `${process.env.HOST_NAME}products/${image}`;
+  });
 
   return JSON.parse(JSON.stringify(product));
 };
@@ -40,7 +43,15 @@ export const getProductsByTerms = async (term: string): Promise<Array<IProduct>>
 
   await db.disconnect();
 
-  return products;
+  // ! IMAGES LOCALHOST
+  const updatedProducts = products.map((product) => {
+    product.images = product.images.map((image) => {
+      return image.includes("http") ? image : `${process.env.HOST_NAME}products/${image}`;
+    });
+    return product;
+  });
+
+  return updatedProducts;
 };
 
 export const getAllProducts = async (): Promise<Array<IProduct>> => {
@@ -49,5 +60,13 @@ export const getAllProducts = async (): Promise<Array<IProduct>> => {
   console.log({ productosGetAllProducts: products });
   await db.disconnect();
 
-  return JSON.parse(JSON.stringify(products));
+  // ! IMAGES LOCALHOST
+  const updatedProducts = products.map((product) => {
+    product.images = product.images.map((image) => {
+      return image.includes("http") ? image : `${process.env.HOST_NAME}products/${image}`;
+    });
+    return product;
+  });
+
+  return JSON.parse(JSON.stringify(updatedProducts));
 };
