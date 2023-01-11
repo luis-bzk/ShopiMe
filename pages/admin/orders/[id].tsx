@@ -20,7 +20,7 @@ const OrderAdminPage: NextPage<Props> = ({ order }) => {
 
   return (
     <AdminLayout
-      title={`Resumen de la orden: ${_id}`}
+      title={`Orden: ${_id}`}
       subTitle={"Administrar orden de usuario"}
       pageDescription={"Manage user order"}
       icon={<SellOutlined />}

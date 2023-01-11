@@ -33,3 +33,5 @@ Cambiar el nombre del archivo __.env.template__ a __.env__
 5. Data generation
 
 Call ```http://localhost:3000/api/seed``` to insert data in your Mongoose Database.
+
+6. Cloudinary || AWS S3 Bucket || Firebase Storage

@@ -1,6 +1,6 @@
 import { IUser } from "./user";
 import { IValidGender, IValidSize } from "./products";
-import { TShippingAddressData } from "./addressData";
+import { TShippingAddressData } from "./useFormsData";
 
 export interface IOrder {
   _id?: string;

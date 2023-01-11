@@ -5,12 +5,12 @@ export type IValidGender = "men" | "women" | "kid" | "unisex";
 export interface IProduct {
   _id: string;
   description: string;
-  images: string[];
+  images: Array<string>;
   inStock: number;
   price: number;
-  sizes: IValidSize[];
+  sizes: Array<IValidSize>;
   slug: string;
-  tags: string[];
+  tags: Array<string>;
   title: string;
   type: IValidType;
   gender: IValidGender;

@@ -8,6 +8,7 @@ const productSchema = new Schema<IProduct, productModel>(
     description: {
       type: String,
       require: true,
+      default: "",
     },
     images: [{ type: String }],
     inStock: {
@@ -33,6 +34,7 @@ const productSchema = new Schema<IProduct, productModel>(
       type: String,
       require: true,
       unique: true,
+      default: "",
     },
     tags: [
       {
@@ -42,6 +44,7 @@ const productSchema = new Schema<IProduct, productModel>(
     title: {
       type: String,
       require: true,
+      default: "",
     },
     type: {
       type: String,
@@ -49,6 +52,7 @@ const productSchema = new Schema<IProduct, productModel>(
         values: ["shirts", "pants", "hoodies", "hats"],
         message: "{VALUE} no es un tipo permitido",
       },
+      default: "hats",
     },
     gender: {
       type: String,
@@ -56,6 +60,7 @@ const productSchema = new Schema<IProduct, productModel>(
         values: ["men", "women", "kid", "unisex"],
         message: "{VALUE} no es un genero permitido",
       },
+      default: "kid",
     },
   },
   { timestamps: true }
